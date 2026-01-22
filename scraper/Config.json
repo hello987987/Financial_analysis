@@ -1,0 +1,12 @@
+{
+  "yahoo": {
+    "url": "https://au.finance.yahoo.com/topic/technology/",
+    "select_term": "section[data-testid=\"storyitem\"], section[data-testid^=\"leadStory\"]"
+    },
+
+  "reuters": {
+    "url": "https://www.reuters.com/markets/stocks/",
+    "select_term": "section[data-testid=\"three_columns\"]"
+  }
+
+}
