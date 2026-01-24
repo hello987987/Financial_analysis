@@ -7,6 +7,10 @@
   "reuters": {
     "url": "https://www.reuters.com/markets/stocks/",
     "select_term": "section[data-testid=\"three_columns\"]"
+  },
+  "cnbc":{
+    "url":"https://www.cnbc.com/world/?region=world",
+    "select_term": "div[class=\"SecondaryCard-headline\"]"
   }
 
 }

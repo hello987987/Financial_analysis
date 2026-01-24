@@ -34,21 +34,33 @@ class scraper:
         for index, site_data in enumerate(sites):
             soup = bs(site_data["html"], 'html.parser')
 
-            stories = soup.select(self.site_registry.get_spec("yahoo"))
+            stories = soup.select(site_data["spec"])
 
             self.print_debug(f"site {index} has {len(stories)} stories")
 
-            for story in stories:
-                st = story.find(attrs={"aria-label": True})
-                desc = story.find("p")
-                title = st["aria-label"]
-                url = st["href"]
-                self.story_registry.append({
-                    "title": title if title else "NO_TITLE",
-                    "url": url if url else "NO_URL",
-                    "desc": desc.get_text(strip=True) if desc else "NO_DESC"
-                })
+            current_site_reg = self._create_story_reg(stories)
+            self.story_registry.extend(current_site_reg)
+
         self.Generate_Csv(self.story_registry)
+
+
+    def _create_story_reg(self, site_stories):
+        stories_reg = []
+
+        for story in site_stories:
+
+            st = story.find(attrs={"aria-label": True})
+            desc = story.find("p")
+            title = st.get("aria-label")
+            url = st["href"]
+
+            stories_reg.append({
+                "title": title if title else "NO_TITLE",
+                "url": url if url else "NO_URL",
+                "desc": desc.get_text(strip=True) if desc else "NO_DESC"
+            })
+
+        return stories_reg
 
     
     def _Get_Sites_Data(self):
@@ -68,7 +80,7 @@ class scraper:
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True)
             page = browser.new_page()
-            response = page.goto(url, wait_until="networkidle")
+            response = page.goto(url, wait_until="domcontentloaded", timeout=15000)
             html = page.content()
             status = response.status if response else None
             browser.close()
