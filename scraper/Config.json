@@ -1,7 +1,11 @@
 {
   "yahoo": {
     "url": "https://au.finance.yahoo.com/topic/technology/",
-    "select_term": "section[data-testid=\"storyitem\"], section[data-testid^=\"leadStory\"]"
+    "select_term": "section[data-testid=\"storyitem\"], section[data-testid^=\"leadStory\"]",
+    "title": {
+      "in_attr": true,
+      "string": "aria-label"
+    }
     },
 
   "reuters": {
@@ -10,7 +14,11 @@
   },
   "cnbc":{
     "url":"https://www.cnbc.com/world/?region=world",
-    "select_term": "div[class=\"SecondaryCard-headline\"]"
+    "select_term": "div[class=\"RiverPlusCard-container\"]",
+    "title": {
+      "in_attr": false,
+      "string": "a"
+    }
   }
 
 }

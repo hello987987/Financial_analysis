@@ -21,7 +21,7 @@ class scraper:
         self.site_registry = SelectorRegistry()
 
 
-    def Save_Scrape(self, filename: str, path: str, debug:bool = False): #TODO: Refactor nested for-loop and generalise for all sites
+    def Save_Scrape(self, filename: str, path: str, debug:bool = False):
         self.story_registry = []
         self.csv_filename = filename
         self.path = path
@@ -34,30 +34,30 @@ class scraper:
         for index, site_data in enumerate(sites):
             soup = bs(site_data["html"], 'html.parser')
 
-            stories = soup.select(site_data["spec"])
+            story_search = self.site_registry.get_spec(site_data["name"])
+            stories = soup.select(story_search)
 
             self.print_debug(f"site {index} has {len(stories)} stories")
 
-            current_site_reg = self._create_story_reg(stories)
+
+            current_site_reg = self._create_story_reg(stories, site_data["name"])
             self.story_registry.extend(current_site_reg)
 
         self.Generate_Csv(self.story_registry)
 
 
-    def _create_story_reg(self, site_stories):
+    def _create_story_reg(self, site_stories, site_name):
         stories_reg = []
 
         for story in site_stories:
 
-            st = story.find(attrs={"aria-label": True})
-            desc = story.find("p")
-            title = st.get("aria-label")
-            url = st["href"]
+            
+            title = self.site_registry.get_title(site_name, story)
+
 
             stories_reg.append({
                 "title": title if title else "NO_TITLE",
-                "url": url if url else "NO_URL",
-                "desc": desc.get_text(strip=True) if desc else "NO_DESC"
+                "site_origin" : site_name if site_name else "UNKNON_ORIGIN"
             })
 
         return stories_reg
@@ -71,7 +71,7 @@ class scraper:
             self.print_debug(f"site {index} : {status}")
             site_data.append({
                 "html": data,
-                "spec": self.site_registry.get_spec(name)
+                "name": name
                 })
             
         return site_data
@@ -94,7 +94,7 @@ class scraper:
         with open(file, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(
                 f,
-                fieldnames=["title", "url", "desc"]
+                fieldnames=["title", "site_origin", "desc"]
             )
             writer.writeheader()
             writer.writerows(Registry)

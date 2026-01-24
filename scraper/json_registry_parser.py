@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-
+from bs4 import BeautifulSoup as bs
 
 class SelectorRegistry:
     def __init__(self):
@@ -15,6 +15,17 @@ class SelectorRegistry:
     
     def get_url(self,name:str):
         return self.config[name]["url"]
+    
+    def get_title(self, name:str, soup):
+        if self.config[name]["title"]["in_attr"]:
+            attr = self.config[name]["title"]["string"]
+            st = soup.find(attrs={"aria-label": True})
+            return st.get("aria-label")
+        else:
+            tag = self.config[name]["title"]["string"]
+            title = soup.find(tag)
+            return title.get_text(strip=True)
+    
 
 if __name__ == "__main__":
     s = SelectorRegistry()
