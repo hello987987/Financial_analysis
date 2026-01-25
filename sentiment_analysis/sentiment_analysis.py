@@ -2,6 +2,7 @@ import csv
 from transformers import pipeline
 import spacy
 from pathlib import Path
+#from scraper import 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 CSV_DIR = PROJECT_ROOT / "csv_data"
@@ -45,6 +46,7 @@ class SentimentAggregator:
 
                 for ent in entities:
                     self.company_sentiment.setdefault(ent, []).append(article)
+                    
     # Need to store csv's in csv_data
     def process_folder(self, folder_path):
         folder = Path(folder_path)
