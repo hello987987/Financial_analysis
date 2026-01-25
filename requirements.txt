@@ -1,3 +1,12 @@
+
 beautifulsoup4
 playwright
 requests
+
+transformers
+torch
+spacy
+
+# After installing, run:
+# python -m spacy download en_core_web_sm
+
