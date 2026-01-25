@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup as bs
 from pathlib import Path
-from json_registry_parser import SelectorRegistry
+from scraper.selector_registry import SelectorRegistry
 from playwright.sync_api import sync_playwright
 import requests
 import csv

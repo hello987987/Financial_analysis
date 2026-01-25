@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup as bs
 from pathlib import Path
-from json_registry_parser import SelectorRegistry
+from scraper.selector_registry import SelectorRegistry
 from playwright.sync_api import sync_playwright
 import requests
 import csv
@@ -52,12 +52,14 @@ class scraper:
         for story in site_stories:
 
             
-            title = self.site_registry.get_title(site_name, story)
+            title = self.site_registry.get_reg_element(site_name, story, "title")
+            desc =  self.site_registry.get_reg_element(site_name, story, "desc")
 
 
             stories_reg.append({
                 "title": title if title else "NO_TITLE",
-                "site_origin" : site_name if site_name else "UNKNON_ORIGIN"
+                "site_origin" : site_name if site_name else "UNKNON_ORIGIN",
+                "desc": desc if desc else "NO_DESCRIPTION"
             })
 
         return stories_reg
@@ -94,7 +96,7 @@ class scraper:
         with open(file, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(
                 f,
-                fieldnames=["title", "site_origin", "desc"]
+                fieldnames=["site_origin", "title", "desc"]
             )
             writer.writeheader()
             writer.writerows(Registry)

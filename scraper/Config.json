@@ -5,6 +5,10 @@
     "title": {
       "in_attr": true,
       "string": "aria-label"
+    },
+    "desc": {
+      "in_attr": false,
+      "string" : "p"
     }
     },
 
