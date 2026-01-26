@@ -1,0 +1,16 @@
+REFACTORED CLASSES
+
+SITE REGISTRY
+-gives the information in the .json
+HTML FETCHER
+- gets the html for the site
+STORY EXTRACTOR
+- reduces the html to a list of html elements that are news stories
+SELECTOR EXTRACTOR
+- extracts the defining features of the htmlstory
+STORY REGISTRY
+- creates the registry
+CSV WRITER
+- writes up the registry into a csv file
+NEWS SCRAPER
+- calls main obj functions only
