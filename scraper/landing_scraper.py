@@ -6,7 +6,7 @@ import requests
 import csv
 
 
-class scraper:
+class LandingScraper:
 
     def __init__(self):
         self.headers = {
@@ -54,12 +54,13 @@ class scraper:
             
             title = self.site_registry.get_reg_element(site_name, story, "title")
             desc =  self.site_registry.get_reg_element(site_name, story, "desc")
-
+            url = self.site_registry.get_reg_element(site_name, story, "search_url")
 
             stories_reg.append({
                 "title": title if title else "NO_TITLE",
                 "site_origin" : site_name if site_name else "UNKNON_ORIGIN",
-                "desc": desc if desc else "NO_DESCRIPTION"
+                "desc": desc if desc else "NO_DESCRIPTION",
+                "url": url if url else "NO_URL"
             })
 
         return stories_reg
@@ -73,7 +74,7 @@ class scraper:
             self.print_debug(f"site {index} : {status}")
             site_data.append({
                 "html": data,
-                "name": name
+                "name": name,
                 })
             
         return site_data
@@ -96,7 +97,7 @@ class scraper:
         with open(file, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(
                 f,
-                fieldnames=["site_origin", "title", "desc"]
+                fieldnames=["site_origin", "title", "desc", "url"]
             )
             writer.writeheader()
             writer.writerows(Registry)
@@ -104,7 +105,3 @@ class scraper:
     def print_debug(self, string: str):
         if self.debug:
             print(string)
-
-if __name__ == "__main__":
-    sc = scraper()
-    sc.Save_Scrape("test.csv","", True)

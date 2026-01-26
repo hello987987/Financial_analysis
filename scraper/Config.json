@@ -9,6 +9,10 @@
     "desc": {
       "in_attr": false,
       "string" : "p"
+    },
+    "search_url": {
+      "in_attr": true,
+      "string": "href"
     }
     },
 
@@ -22,6 +26,10 @@
     "title": {
       "in_attr": false,
       "string": "a"
+    },
+    "search_url": {
+      "in_attr": true,
+      "string": "href"
     }
   }
 
