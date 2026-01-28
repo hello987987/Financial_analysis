@@ -13,12 +13,25 @@ class HtmlFetcher:
         }
 
     def fetch(self, url:str):# TODO: make this try headless if bad return code.
-        http_response = self._request_get(url)
-        return http_response.text
+        try:
+            http_response = self._request_get(url)
+            if http_response and http_response.ok:
+                return http_response.text
+
+            return self._headless_get(url)
+        
+        except Exception:
+            return ""
 
     def _request_get(self, url:str):
-        http_response = requests.get(url, timeout=10)
+        http_response = requests.get(url, timeout=10)  
         return http_response
 
-    def _headless_get():
-        pass
+    def _headless_get(self, url:str):
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
+            response = page.goto(url, wait_until="domcontentloaded", timeout=15000)
+            html = page.content()
+            browser.close()
+            return html

@@ -6,7 +6,7 @@ HTML FETCHER
 - gets the html for the site
 STORY EXTRACTOR
 - reduces the html to a list of html elements that are news stories
-SELECTOR EXTRACTOR
+FEATURE EXTRACTOR
 - extracts the defining features of the htmlstory
 STORY REGISTRY
 - creates the registry
