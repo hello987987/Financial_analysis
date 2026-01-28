@@ -1,12 +1,14 @@
 from html_fetcher import HtmlFetcher
 from site_registry import SiteRegistry
 from story_extractor import StoryExtractor
+from story_registry import StoryRegistry
 
 class NewsScraper:
     def __init__(self):
         self.html_fetcher = HtmlFetcher()
         self.site_registry = SiteRegistry()
         self.story_extractor = StoryExtractor()
+        self.story_registry = StoryRegistry()
 
     def scrape_headlines(self,):
 
@@ -18,6 +20,7 @@ class NewsScraper:
             current_html = self.html_fetcher.fetch(site_url)
             
             current_site_stories = self.story_extractor.breakdown_stories(site, current_html)
+            
             #extract features and append to registry
         #generate the csv
         return current_site_stories
