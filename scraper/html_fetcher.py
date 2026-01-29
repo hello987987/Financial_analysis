@@ -27,7 +27,10 @@ class HtmlFetcher:
             return ""
 
     def _request_get(self, url:str) -> requests.Response:
-        http_response = requests.get(url, timeout=10)  
+        http_response = requests.get(
+            url,
+            timeout=10,
+            headers=self.headers)  
         return http_response
 
     def _headless_get(self, url: str) -> str:

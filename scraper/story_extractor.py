@@ -14,26 +14,30 @@ class StoryExtractor:
         
         for story in stories:
             self._extract_story_features(name, story)
-            
     
     def _extract_story_features(self, site_name, soup_element) -> None:
         title = self._extract_feature(site_name, soup_element, "title")
         desc =  self._extract_feature(site_name, soup_element, "desc")
         url = self._extract_feature(site_name, soup_element, "search_url")
+        time = self._extract_feature(site_name, soup_element, "time")
 
         self.site_stories.append({
             "title": title if title else "NO_TITLE",
             "site_origin" : site_name if site_name else "UNKNON_ORIGIN",
             "desc": desc if desc else "NO_DESCRIPTION",
-            "url": url if url else "NO_URL"
+            "url": url if url else "NO_URL",
+            "time": time if time else "NO_TIME"
         })
         
     def _extract_feature(self, name:str, soup, element_type: str) -> str:
-        term = self.site_registry.get_element_selector(name, element_type)
+        term = self.site_registry.get_element_selector(name, element_type) #time: in_attr = false, "string": = "div"
         if not term:
             return None
         term = term["string"]
-        is_attribute = self.site_registry.is_in_attr(name, element_type)
+
+        is_attribute = self.site_registry.is_in_attr(name, element_type)# false
+        identify_with_attr = self.site_registry.needs_attr_identification(name, element_type)
+
 
         if is_attribute:
             attr = term
@@ -41,9 +45,12 @@ class StoryExtractor:
             return st.get(attr) if st else None
         else:
             tag = term
-            tag_value = soup.find(tag)
+            if identify_with_attr:
+                tag_value = soup.select_one(term)
+            else:
+                tag_value = soup.find(tag)
             return tag_value.get_text(strip=True) if tag_value else None
 
 
     def get_saved_stories(self) -> list[dict]:
-        return self.site_stories
+        return self.site_stories 

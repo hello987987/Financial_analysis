@@ -19,7 +19,11 @@ class SiteRegistry:
     def is_in_attr(self, site_name, element_type):
         return self.config[site_name][element_type]["in_attr"]
     
+    def needs_attr_identification(self, site_name, element_type) -> bool:
+        return self.config.get(site_name, {}).get(element_type, {}).get("attr_identify", False)
+    
     def get_element_selector(self, name:str, element_type):
         element_select_term = self.config.get(name, {}).get(element_type)
         
         return element_select_term
+    

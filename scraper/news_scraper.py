@@ -16,11 +16,13 @@ class NewsScraper:
         site_keys = self.site_registry.get_names()
 
         for i, site in enumerate(site_keys):
-            
+
             site_url = self.site_registry.get_url(site)
             current_html = self.html_fetcher.fetch(site_url)
             
             self.story_extractor.extract_and_save_stories(site, current_html)
+
+            print()
 
         self.Generate_Csv(self.story_extractor.get_saved_stories())
 
@@ -32,7 +34,7 @@ class NewsScraper:
         with open(file, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(
                 f,
-                fieldnames=["site_origin", "title", "desc", "url"]
+                fieldnames=["site_origin", "title", "desc", "url", "time"]
             )
             writer.writeheader()
             writer.writerows(Registry)
