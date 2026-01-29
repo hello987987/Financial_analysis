@@ -6,7 +6,7 @@ class SiteRegistry:
             self.config = json.load(f)
 
     
-    def get_url(self,name:str):
+    def get_url(self,name:str) -> str:
         return self.config[name]["url"]
 
 

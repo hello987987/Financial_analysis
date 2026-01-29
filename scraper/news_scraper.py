@@ -21,9 +21,9 @@ class NewsScraper:
             site_url = self.site_registry.get_url(site)
             current_html = self.html_fetcher.fetch(site_url)
             
-            self.story_extractor.breakdown_stories(site, current_html)
+            self.story_extractor.extract_and_save_stories(site, current_html)
 
-        self.Generate_Csv(self.story_extractor.get_registry())
+        self.Generate_Csv(self.story_extractor.get_saved_stories())
 
     def Generate_Csv(self, Registry):
         if not Registry:
