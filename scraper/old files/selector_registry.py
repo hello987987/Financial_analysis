@@ -13,8 +13,11 @@ class SelectorRegistry:
     def get_site_names(self):
         return list(self.config.keys())
     
-    def get_url(self,name:str):
-        return self.config[name]["url"]
+    def get_url(self,site_name:str):
+        return self.config[site_name]["url"]
+    
+    def in_attr(self, site_name, element_type):
+        return self.config[site_name][element_type]["in_attr"]
     
     def get_reg_element(self, name:str, soup, element_type: str):
         site_element_reg = self.config.get(name, {}).get(element_type)

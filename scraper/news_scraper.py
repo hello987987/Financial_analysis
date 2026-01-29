@@ -7,7 +7,7 @@ class NewsScraper:
     def __init__(self):
         self.html_fetcher = HtmlFetcher()
         self.site_registry = SiteRegistry()
-        self.story_extractor = StoryExtractor()
+        self.story_extractor = StoryExtractor(self.site_registry)
         self.story_registry = StoryRegistry()
 
     def scrape_headlines(self,):
@@ -19,11 +19,12 @@ class NewsScraper:
             site_url = self.site_registry.get_url(site)
             current_html = self.html_fetcher.fetch(site_url)
             
-            current_site_stories = self.story_extractor.breakdown_stories(site, current_html)
+            self.story_extractor.breakdown_stories(site, current_html)
+            
             
             #extract features and append to registry
         #generate the csv
-        return current_site_stories
+        return self.story_extractor.get_registry()
 
 
 if __name__ == "__main__":

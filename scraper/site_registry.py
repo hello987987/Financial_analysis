@@ -16,3 +16,11 @@ class SiteRegistry:
 
     def get_story_selector(self, name:str):
         return self.config[name]["select_term"]
+    
+    def is_in_attr(self, site_name, element_type):
+        return self.config[site_name][element_type]["in_attr"]
+    
+    def get_element_selector(self, name:str, element_type):
+        element_select_term = self.config.get(name, {}).get(element_type)
+        
+        return element_select_term
