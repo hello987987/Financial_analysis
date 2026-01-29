@@ -1,7 +1,6 @@
 from scraper.html_fetcher import HtmlFetcher
 from scraper.site_registry import SiteRegistry
 from scraper.story_extractor import StoryExtractor
-from scraper.story_registry import StoryRegistry
 import csv
 
 class NewsScraper:
@@ -9,7 +8,7 @@ class NewsScraper:
         self.html_fetcher = HtmlFetcher()
         self.site_registry = SiteRegistry()
         self.story_extractor = StoryExtractor(self.site_registry)
-        self.story_registry = StoryRegistry()
+
         
 
     def scrape_headlines(self, pathname):
