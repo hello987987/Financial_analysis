@@ -1,0 +1,5 @@
+yfinance
+datetime
+json
+pathlib
+zoneinfo
