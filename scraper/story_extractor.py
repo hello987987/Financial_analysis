@@ -1,12 +1,12 @@
 from bs4 import BeautifulSoup as bs
-from site_registry import SiteRegistry
+from scraper.site_registry import SiteRegistry
 
 class StoryExtractor:
     def __init__(self, story_registry):
         self.site_registry = story_registry
         self.site_stories = []
 
-    def breakdown_stories(self, name, html): #GOAL: to
+    def extract_and_save_stories(self, name, html) -> None: 
         select_string = self.site_registry.get_story_selector(name)
         
         soup = bs(html, 'html.parser')
@@ -16,7 +16,7 @@ class StoryExtractor:
             self._extract_story_features(name, story)
             
     
-    def _extract_story_features(self, site_name, soup_element):
+    def _extract_story_features(self, site_name, soup_element) -> None:
         title = self._extract_feature(site_name, soup_element, "title")
         desc =  self._extract_feature(site_name, soup_element, "desc")
         url = self._extract_feature(site_name, soup_element, "search_url")
@@ -28,7 +28,7 @@ class StoryExtractor:
             "url": url if url else "NO_URL"
         })
         
-    def _extract_feature(self, name:str, soup, element_type: str):
+    def _extract_feature(self, name:str, soup, element_type: str) -> str:
         term = self.site_registry.get_element_selector(name, element_type)
         if not term:
             return None
@@ -37,7 +37,7 @@ class StoryExtractor:
 
         if is_attribute:
             attr = term
-            st = soup.find(attrs={attr})
+            st = soup.find(attrs={attr:True})
             return st.get(attr) if st else None
         else:
             tag = term
@@ -45,5 +45,5 @@ class StoryExtractor:
             return tag_value.get_text(strip=True) if tag_value else None
 
 
-    def get_registry(self):
+    def get_saved_stories(self) -> list[dict]:
         return self.site_stories

@@ -1,7 +1,7 @@
-from html_fetcher import HtmlFetcher
-from site_registry import SiteRegistry
-from story_extractor import StoryExtractor
-from story_registry import StoryRegistry
+from scraper.html_fetcher import HtmlFetcher
+from scraper.site_registry import SiteRegistry
+from scraper.story_extractor import StoryExtractor
+from scraper.story_registry import StoryRegistry
 import csv
 
 class NewsScraper:

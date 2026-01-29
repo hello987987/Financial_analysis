@@ -1,4 +1,4 @@
-from scraper.landing_scraper import LandingScraper as scraper
+from scraper.news_scraper import NewsScraper as scraper
 
 sc = scraper()
-sc.Save_Scrape("test.csv","csv_data/", True)
+sc.scrape_headlines("csv_data/test.csv")
