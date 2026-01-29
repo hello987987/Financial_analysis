@@ -13,11 +13,8 @@ class StoryExtractor:
         stories = soup.select(select_string)
         
         for story in stories:
-            story_registry_element = self._extract_story_features(name, story)
-            self.site_stories.append(story_registry_element)
-
-    
-    
+            self._extract_story_features(name, story)
+            
     
     def _extract_story_features(self, site_name, soup_element):
         title = self._extract_feature(site_name, soup_element, "title")

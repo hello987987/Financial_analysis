@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup as bs
 from pathlib import Path
-from scraper.selector_registry import SelectorRegistry
+from selector_registry import SelectorRegistry
 from playwright.sync_api import sync_playwright
 import requests
 import csv
@@ -105,3 +105,6 @@ class LandingScraper:
     def print_debug(self, string: str):
         if self.debug:
             print(string)
+if __name__ == "__main__":
+    ls = LandingScraper()
+    ls.Save_Scrape("test.csv", "", True)

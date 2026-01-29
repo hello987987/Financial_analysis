@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup as bs
 
 class SelectorRegistry:
     def __init__(self):
-        with open("./scraper/Config.json", "r", encoding="utf-8") as f:
+        with open("./scraper/HeadlineConfig.json", "r", encoding="utf-8") as f:
             self.config = json.load(f)
 
     def get_spec(self, site: str):

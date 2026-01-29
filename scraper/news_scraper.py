@@ -2,6 +2,7 @@ from html_fetcher import HtmlFetcher
 from site_registry import SiteRegistry
 from story_extractor import StoryExtractor
 from story_registry import StoryRegistry
+import csv
 
 class NewsScraper:
     def __init__(self):
@@ -9,9 +10,10 @@ class NewsScraper:
         self.site_registry = SiteRegistry()
         self.story_extractor = StoryExtractor(self.site_registry)
         self.story_registry = StoryRegistry()
+        
 
-    def scrape_headlines(self,):
-
+    def scrape_headlines(self, pathname):
+        self.file_pathname = pathname
         site_keys = self.site_registry.get_names()
 
         for i, site in enumerate(site_keys):
@@ -20,13 +22,22 @@ class NewsScraper:
             current_html = self.html_fetcher.fetch(site_url)
             
             self.story_extractor.breakdown_stories(site, current_html)
-            
-            
-            #extract features and append to registry
-        #generate the csv
-        return self.story_extractor.get_registry()
 
+        self.Generate_Csv(self.story_extractor.get_registry())
+
+    def Generate_Csv(self, Registry):
+        if not Registry:
+            raise Exception("registry is not defined")
+
+        file = self.file_pathname
+        with open(file, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(
+                f,
+                fieldnames=["site_origin", "title", "desc", "url"]
+            )
+            writer.writeheader()
+            writer.writerows(Registry)
 
 if __name__ == "__main__":
     ns = NewsScraper()
-    print(ns.scrape_headlines())
+    ns.scrape_headlines("test.csv")
