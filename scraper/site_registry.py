@@ -10,9 +10,8 @@ class SiteRegistry:
         return self.config[name]["url"]
 
 
-    def get_names(self):
+    def get_names(self) -> list[str]:
         return list(self.config.keys())
-
 
     def get_story_selector(self, name:str):
         return self.config[name]["select_term"]
