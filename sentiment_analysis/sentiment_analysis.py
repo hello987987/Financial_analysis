@@ -2,6 +2,7 @@ import csv
 from transformers import pipeline
 import spacy
 from pathlib import Path
+from CompanyResolver import CompanyResolver
 #from scraper import 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -11,20 +12,31 @@ class SentimentAggregator:
     def __init__(self):
         self.nlp = spacy.load("en_core_web_sm")
         self.sentiment = pipeline( "sentiment-analysis", model="ProsusAI/finbert")
-        self.company_sentiment = {}
+        self.company_sentiment: dict[str, list[dict[str, object]]] = {}
+        self.company_resolver = CompanyResolver(
+            PROJECT_ROOT / "sentiment_analysis" / "company_map.json"
+        )
 
-    def analyse_title(self, title):
+    def analyse_title(self, title: str) -> dict[str, object]:
         result = self.sentiment(title)[0]
         return {
         'sentiment' : result["label"].lower(),
         'confidence' : result["score"]
         }
     
-    def extract_entities(self, text):
+    def extract_entities(self, text: str) -> list[str]:
         doc = self.nlp(text)
-        return [ent.text for ent in doc.ents if ent.label_ == "ORG"]
+        companies = set()
+
+        for ent in doc.ents:
+            if ent.label_ == "ORG":
+                canon = self.company_resolver.resolve(ent.text)
+                if canon:
+                    companies.add(canon)
+
+        return list(companies)
     
-    def process_csv(self, csv_path):
+    def process_csv(self, csv_path: Path) -> None:
         with open(csv_path, newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
@@ -32,7 +44,7 @@ class SentimentAggregator:
                 if not title:
                     continue
 
-                publisher = row.get("publisher", "") # Column needs to be added
+                publisher = row.get("site_origin", "") 
 
                 sent = self.analyse_title(title)
                 entities = self.extract_entities(title)
@@ -47,8 +59,7 @@ class SentimentAggregator:
                 for ent in entities:
                     self.company_sentiment.setdefault(ent, []).append(article)
                     
-    # Need to store csv's in csv_data
-    def process_folder(self, folder_path):
+    def process_folder(self, folder_path: Path) -> None:
         folder = Path(folder_path)
 
         for csv_file in folder.glob("*.csv"):
@@ -57,7 +68,8 @@ class SentimentAggregator:
                 csv_path=csv_file
             )
 
-    #testing function
+
+    #testing function, ignore
     def print_summary(self, per_company = 3): 
         for company, articles in self.company_sentiment.items():
             print(f"\n{company} ({len(articles)} articles)")
