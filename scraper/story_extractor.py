@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup as bs
 from scraper.site_registry import SiteRegistry
-
+from scraper.normalization.field_normaliser import FieldNormaliser
 class StoryExtractor:
     def __init__(self, story_registry):
         self.site_registry = story_registry
@@ -38,19 +38,26 @@ class StoryExtractor:
         is_attribute = self.site_registry.is_in_attr(name, element_type)# false
         identify_with_attr = self.site_registry.needs_attr_identification(name, element_type)
 
+        feature_data = ""
 
         if is_attribute:
             attr = term
             st = soup.find(attrs={attr:True})
-            return st.get(attr) if st else None
+            feature_data = st.get(attr) if st else None
         else:
             tag = term
             if identify_with_attr:
                 tag_value = soup.select_one(term)
             else:
                 tag_value = soup.find(tag)
-            return tag_value.get_text(strip=True) if tag_value else None
+            feature_data = tag_value.get_text(strip=True) if tag_value else None
 
+        if element_type != "time" or not feature_data:
+            return feature_data
+        
+        fn = FieldNormaliser()
+        return fn.normalise(feature_data)
+    
 
     def get_saved_stories(self) -> list[dict]:
         return self.site_stories 

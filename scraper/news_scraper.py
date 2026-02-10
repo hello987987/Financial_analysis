@@ -1,6 +1,7 @@
 from scraper.html_fetcher import HtmlFetcher
 from scraper.site_registry import SiteRegistry
 from scraper.story_extractor import StoryExtractor
+from scraper.csv_generator import CsvGenerator
 import csv
 
 class NewsScraper:
@@ -8,6 +9,7 @@ class NewsScraper:
         self.html_fetcher = HtmlFetcher()
         self.site_registry = SiteRegistry()
         self.story_extractor = StoryExtractor(self.site_registry)
+        self.csv_generator = CsvGenerator()
 
         
 
@@ -24,7 +26,7 @@ class NewsScraper:
 
             print()
 
-        self.Generate_Csv(self.story_extractor.get_saved_stories())
+        self.csv_generator.Generate_Csv(self.story_extractor.get_saved_stories(),pathname)
 
     def Generate_Csv(self, Registry):
         if not Registry:
