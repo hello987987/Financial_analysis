@@ -14,7 +14,9 @@ class StoryExtractor:
         
         for story in stories:
             self._extract_story_features(name, story)
-    
+            #TODO check if TIME is empty: pass to time grabber object to fix the empty time field
+
+
     def _extract_story_features(self, site_name, soup_element) -> None:
         title = self._extract_feature(site_name, soup_element, "title")
         desc =  self._extract_feature(site_name, soup_element, "desc")

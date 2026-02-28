@@ -21,8 +21,8 @@ class NewsScraper:
             current_html = self.html_fetcher.fetch(site_url)
             
             self.story_extractor.extract_and_save_stories(site, current_html)
+            
 
-            print()
 
         self.Generate_Csv(self.story_extractor.get_saved_stories())
 
