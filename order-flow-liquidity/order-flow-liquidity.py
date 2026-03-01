@@ -121,20 +121,24 @@ class OrderFlowLiquidity:
             # participation
             "total_volume": total_volume,
             "avg_volume": avg_volume,
-            "dollar_volume": dollar_volume,
+            "dollar_volume": dollar_volume, 
 
             # liquidity / fragility
-            "realized_vol": realized_vol,
-            "avg_range_pct": avg_range_pct,
-            "max_range_pct": max_range_pct,
+            "realized_vol": realized_vol, 
+            "avg_range_pct": avg_range_pct, 
+            "max_range_pct": max_range_pct, 
             "amihud_illiq": amihud_illiq,
 
-            # order-flow pressure proxies
+            # order flow pressure proxies
             "signed_return_volume": signed_return_volume,
-            "return_volume_pressure": return_volume_pressure,
-            "up_volume_frac": up_volume_frac,
+            "return_volume_pressure": return_volume_pressure, 
+            "up_volume_frac": up_volume_frac, 
 
             # VWAP context
             "vwap": vwap,
-            "close_vs_vwap": close_vs_vwap,
+            "close_vs_vwap": close_vs_vwap, 
         }
+    
+if __name__ == "__main__":
+    #ODF = OrderFlowLiquidity()
+    #print(ODF.compute_order_flow_liquidity)
