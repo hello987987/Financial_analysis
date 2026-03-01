@@ -8,6 +8,7 @@ class TimerFixer:
     def __init__(self):
         pass
 
-    def somemeth(self):
-        pass
+    def getTime(self, story):
+       url = story["url"]
+       
 
