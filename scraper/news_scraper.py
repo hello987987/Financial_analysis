@@ -1,6 +1,7 @@
 from scraper.html_fetcher import HtmlFetcher
 from scraper.site_registry import SiteRegistry
 from scraper.story_extractor import StoryExtractor
+from scraper.timer_fix import TimeFixer
 import csv
 
 class NewsScraper:
@@ -22,6 +23,13 @@ class NewsScraper:
             
             self.story_extractor.extract_and_save_stories(site, current_html)
             
+
+        completed_story_registry = self.story_extractor.get_saved_stories() 
+        time_fixer = TimeFixer()
+        
+        for story in completed_story_registry:
+            if story["time"] == "NO_TIME":
+                story["time"] = time_fixer.getTime(story)
 
 
         self.Generate_Csv(self.story_extractor.get_saved_stories())
