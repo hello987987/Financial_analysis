@@ -3,6 +3,8 @@ from transformers import pipeline
 import spacy
 from pathlib import Path
 from CompanyResolver import CompanyResolver
+import re
+from datetime import datetime
 #from scraper import 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -17,7 +19,14 @@ class SentimentAggregator:
             PROJECT_ROOT / "sentiment_analysis" / "company_map.json"
         )
 
+    def normalise_title(title) -> str:
+        title = title.lower()
+        title = re.sub(r"[^a-z0-9\s]", " ", title)
+        title = re.sub(r"\s+", " ", title).strip()
+        return title
+
     def analyse_title(self, title: str) -> dict[str, object]:
+        title = self.normalise_title(title)
         result = self.sentiment(title)[0]
         return {
         'sentiment' : result["label"].lower(),
@@ -45,15 +54,21 @@ class SentimentAggregator:
                     continue
 
                 publisher = row.get("site_origin", "") 
-
+                time = datetime.strptime(row.get("time", ""))
                 sent = self.analyse_title(title)
                 entities = self.extract_entities(title)
 
                 article = {
                     "publisher": publisher,
                     "title": title,
+                    "time" : time,
                     "sentiment": sent["sentiment"],
                     "confidence": sent["confidence"],
+                    "weighted sentiment": (
+                        sent["confidence"] if sent["sentiment"] == "positive"
+                        else -sent["confidence"] if sent["sentiment"] == "negative"
+                        else 0.0
+                        )
                 }
 
                 for ent in entities:
